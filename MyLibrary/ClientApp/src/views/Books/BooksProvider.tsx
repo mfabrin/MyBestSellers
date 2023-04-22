@@ -93,7 +93,7 @@ let BooksProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         try {
             setLoading(true);
 
-            let res = await axios.get('/api/Book/BookList', { params: search });
+            let res = await axios.get('/api/Books/BookList', { params: search });
 
             let { items, recordCount } = res.data;
 

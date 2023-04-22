@@ -40,7 +40,7 @@ let BookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             try {
                 setLoading(true);
 
-                let res = await axios.get('/api/Book/BookDetails', { params: { isbn: id } });
+                let res = await axios.get('/api/Books/BookDetails', { params: { isbn: id } });
 
                 setBook(res.data.item);
 
