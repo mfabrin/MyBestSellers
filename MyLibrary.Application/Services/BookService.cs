@@ -35,6 +35,7 @@ namespace MyLibrary.Application.Services
                     Author = x.author,
                     Contributor = x.contributor,
                     Image = x.book_image,
+                    Category = category,
                     Description = x.description
                 }).ToList();
 

@@ -1,14 +1,15 @@
 import { useContext } from 'react';
-import { Grid, Typography, Card, CardHeader, Avatar, CardMedia, CardContent, CardActions, IconButton } from '@mui/material';
+import { Grid, Typography, Card, CardHeader, CardMedia, CardContent, CardActions, IconButton, CardActionArea } from '@mui/material';
 import { Favorite as FavoriteIcon } from '@mui/icons-material';
-import { CircleLoader, ViewIconButton } from 'components'
+import { CircleLoader } from 'components'
 import { booksContext } from '../BooksProvider';
-import { red } from '@mui/material/colors';
+import { useNavigate } from 'react-router-dom';
 
 
 let Results = () => {
+    let navigate = useNavigate();
 
-    let { isLoading, books } = useContext(booksContext);
+    let { isLoading, search, books } = useContext(booksContext);
 
     return (
         <>
@@ -16,25 +17,19 @@ let Results = () => {
             {isLoading === false &&
                 <Grid container>
                     {books.map(book =>
-                        <Grid item xs={12} sm={4} md={6} lg={3}>
-                            <Card sx={{ maxWidth: 345 }}>
-                                <CardHeader
-                                    avatar={
-                                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                            R
-                                        </Avatar>
-                                    }
-                                    action={<ViewIconButton link={`/book/${book.isbn}`} />}
-                                    title={book.title}
-                                    subheader={book.author}
-                                />
-                                <CardMedia
-                                    component="img"
-                                    height="194"
-                                    image={book.image}
-                                    alt={book.title}
-                                />
+                        <Grid item xs={12} sm={4} md={6} lg={2}>
+                            <Card>
+                                <CardActionArea onClick={() => navigate(`/book/${book.category}/${search.pageNr}/${book.isbn}/`)}>
+                                    <CardMedia
+                                        component="img"
+                                        image={book.image}
+                                        alt={book.title}
+                                    />
+                                </CardActionArea>
                                 <CardContent>
+                                    <Typography color="text.secondary">
+                                        {book.title}
+                                    </Typography>
                                     <Typography variant="body2" color="text.secondary">
                                         {book.description}
                                     </Typography>

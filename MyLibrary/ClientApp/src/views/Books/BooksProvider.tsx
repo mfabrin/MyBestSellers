@@ -27,6 +27,7 @@ interface IBook {
     author: string
     contributor: string
     image: string
+    category: string
     description: string
 }
 

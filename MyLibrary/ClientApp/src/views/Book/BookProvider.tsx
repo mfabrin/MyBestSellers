@@ -25,7 +25,7 @@ export let bookContext = React.createContext({} as IContext);
 let { Provider } = bookContext;
 
 let BookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    let { id } = useParams<{ id: string }>();
+    let { isbn, pageNr, category } = useParams<{ isbn: string, pageNr: string, category: string }>();
     let location = useLocation();
     let navigate = useNavigate();
 
@@ -36,11 +36,11 @@ let BookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 
     useEffect(() => {
-        let getBook = async (id: string) => {
+        let getBook = async () => {
             try {
                 setLoading(true);
 
-                let res = await axios.get('/api/Books/BookDetails', { params: { isbn: id } });
+                let res = await axios.get('/api/Books/BookDetails', { params: { isbn, pageNr, category } });
 
                 setBook(res.data.item);
 
@@ -50,8 +50,8 @@ let BookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             }
         }
 
-        if (id)
-            getBook(id);
+        if (isbn && pageNr && category)
+            getBook();
     }, [])
 
 

@@ -6,13 +6,12 @@ import { applicationContext } from 'helpers/services';
 
 let Filters = () => {
     let { bookCategories } = useContext(applicationContext);
-    let { search, updateSearch } = useContext(booksContext);
+    let { search, updateSearch, doSearch } = useContext(booksContext);
 
     return (
         <FilterContainer>
             <Grid item>
                 <TextField
-                    fullWidth
                     variant="standard"
                     label="ISBN"
                     value={search.isbn}
@@ -25,7 +24,6 @@ let Filters = () => {
             <Grid item>
                 <TextField
                     select
-                    fullWidth
                     variant="standard"
                     label="Category"
                     value={search.category}
@@ -38,7 +36,7 @@ let Filters = () => {
                 </TextField>
             </Grid>
             <Grid item>
-                <Button>Search</Button>
+                <Button type="submit" color="secondary" onClick={() => doSearch(search)}>Search</Button>
             </Grid>
         </FilterContainer>
     )

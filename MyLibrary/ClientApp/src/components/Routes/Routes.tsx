@@ -14,7 +14,7 @@ let Routes = () => {
     return (
         <Router>
             <Route path="/books" element={<PublicRoute children={<Books />} />} />
-            <Route path="/book/:id" element={<PublicRoute children={<Book />} />} />
+            <Route path="/book/:category/:pageNr/:isbn" element={<PublicRoute children={<Book />} />} />
 
             {/* <Route path="/account/login" element={<PublicRoute children={<Login />} />} /> */}
 
