@@ -52,7 +52,7 @@ namespace MyLibrary.Infrastructure.NYTimes
 
         private RestClient GetClient()
         {
-            using var client = new RestClient(_settings.Value.Endpoint);
+            var client = new RestClient(_settings.Value.Endpoint);
             return client;
         }
     }

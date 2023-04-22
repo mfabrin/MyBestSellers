@@ -33,11 +33,11 @@ namespace MyLibrary.Infrastructure.NYTimes.Models
             public int weeks_on_list { get; set; }
             public int asterisk { get; set; }
             public int dagger { get; set; }
-            public int primary_isbn10 { get; set; }
+            public string primary_isbn10 { get; set; }
             public string primary_isbn13 { get; set; }
             public string publisher { get; set; }
             public string description { get; set; }
-            public int price { get; set; }
+            public string price { get; set; }
             public string title { get; set; }
             public string author { get; set; }
             public string contributor { get; set; }
@@ -54,7 +54,7 @@ namespace MyLibrary.Infrastructure.NYTimes.Models
 
         public class Isbn
         {
-            public int isbn10 { get; set; }
+            public string isbn10 { get; set; }
             public string isbn13 { get; set; }
         }
     }
