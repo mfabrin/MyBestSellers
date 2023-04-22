@@ -15,8 +15,8 @@ function App() {
             <CssBaseline />
             <SnackbarProvider preventDuplicate autoHideDuration={4000}>
                 {/* <AuthProvider> */}
+                <AxiosInterceptors />
                 <ApplicationProvider>
-                    <AxiosInterceptors />
                     <Routes />
                 </ApplicationProvider>
                 {/* </AuthProvider> */}
