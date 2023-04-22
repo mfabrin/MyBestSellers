@@ -11,12 +11,12 @@ let Results = () => {
     let { isLoading, books } = useContext(booksContext);
 
     return (
-        <Grid container>
-            <Grid item xs>
-                {isLoading && <CircleLoader />}
-                {isLoading === false &&
-                    <>
-                        {books.map(book =>
+        <>
+            {isLoading && <CircleLoader />}
+            {isLoading === false &&
+                <Grid container>
+                    {books.map(book =>
+                        <Grid item xs={12} sm={4} md={6} lg={3}>
                             <Card sx={{ maxWidth: 345 }}>
                                 <CardHeader
                                     avatar={
@@ -45,11 +45,11 @@ let Results = () => {
                                     </IconButton>
                                 </CardActions>
                             </Card>
-                        )}
-                    </>
-                }
-            </Grid>
-        </Grid>
+                        </Grid>
+                    )}
+                </Grid>
+            }
+        </>
     )
 }
 

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { applicationContext } from 'helpers/services';
 
 interface IContext {
     isLoading: boolean
@@ -37,6 +38,8 @@ let BooksProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     let location = useLocation();
     let navigate = useNavigate();
 
+    let { bookCategories } = useContext(applicationContext);
+
     let [isLoading, setLoading] = useState(true);
 
     let [books, setBooks] = useState<IBook[]>([]);
@@ -44,7 +47,7 @@ let BooksProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     let [search, setSearch] = useState<ISearch>({
         isbn: '',
-        category: '',
+        category: bookCategories[0].key,
         pageNr: 0,
         pageSize: 20
     })

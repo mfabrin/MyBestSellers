@@ -9,7 +9,7 @@ const spacing = 8;
 const theme = createTheme({
     spacing: spacing,
     typography: {
-        fontFamily: ['Muli'].join(','),
+        // fontFamily: ['Muli'].join(','),
         h1: {
             // color: palette.text.primary,
             fontWeight: 600,
@@ -188,6 +188,11 @@ const theme = createTheme({
                         }
                     }
                 },
+            }
+        },
+        MuiTextField: {
+            defaultProps: {
+                fullWidth: true
             }
         }
     }
