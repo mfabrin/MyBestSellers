@@ -1,22 +1,28 @@
-import React, { Component } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import AppRoutes from './AppRoutes';
-import { Layout } from './components/Layout';
-import './custom.css';
+import { SnackbarProvider } from 'notistack';
 
-export default class App extends Component {
-  static displayName = App.name;
+// import 'helpers/Extensions';
 
-  render() {
+import theme from 'assets';
+
+import { Routes, AxiosInterceptors } from 'components';
+// import { AuthProvider } from 'helpers/services';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { ApplicationProvider } from 'helpers/services';
+
+function App() {
     return (
-      <Layout>
-        <Routes>
-          {AppRoutes.map((route, index) => {
-            const { element, ...rest } = route;
-            return <Route key={index} {...rest} element={element} />;
-          })}
-        </Routes>
-      </Layout>
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <SnackbarProvider preventDuplicate autoHideDuration={4000}>
+                {/* <AuthProvider> */}
+                <ApplicationProvider>
+                    <AxiosInterceptors />
+                    <Routes />
+                </ApplicationProvider>
+                {/* </AuthProvider> */}
+            </SnackbarProvider>
+        </ThemeProvider>
     );
-  }
 }
+
+export default App;
