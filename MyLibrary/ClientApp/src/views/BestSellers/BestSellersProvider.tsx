@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import { useLocation, useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs';
 
 interface IContext {
@@ -38,9 +37,6 @@ export let bestSellersContext = React.createContext({} as IContext);
 let { Provider } = bestSellersContext;
 
 let BestSellersProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    let location = useLocation();
-    let navigate = useNavigate();
-
     let [isLoading, setLoading] = useState(true);
 
     let [categories, setCategories] = useState<string[]>([]);
