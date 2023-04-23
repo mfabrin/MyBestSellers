@@ -15,5 +15,6 @@ namespace MyLibrary.Application.DTO.Book
         public string Category { get; set; }
         public string Image { get; set; }
         public string Description { get; set; }
+        public bool IsFavourite { get; set; }
     }
 }

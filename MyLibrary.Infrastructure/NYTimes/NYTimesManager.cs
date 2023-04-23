@@ -16,7 +16,7 @@ namespace MyLibrary.Infrastructure.NYTimes
         }
 
 
-        public async Task<CategoryBooksResponse> GetCategoryBooks(int pageNr, string publishDate, string category)
+        public async Task<CategoryBooksResponse> GetCategoryBooks(int pageNr, string category, string publishDate = "current")
         {
             var client = GetClient();
 

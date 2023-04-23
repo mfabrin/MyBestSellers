@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { enqueueSnackbar } from 'notistack';
 
 interface IContext {
     isLoading: boolean
@@ -14,10 +15,15 @@ interface IContext {
 
 interface IBook {
     isbn: string
+    image: string
     title: string
     author: string
     contributor: string
-    image: string
+    description: string
+    notes: string
+    rank: number
+    isFavourite: boolean
+    isRead: boolean
 }
 
 export let bookContext = React.createContext({} as IContext);
@@ -26,8 +32,6 @@ let { Provider } = bookContext;
 
 let BookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     let { isbn, pageNr, category } = useParams<{ isbn: string, pageNr: string, category: string }>();
-    let location = useLocation();
-    let navigate = useNavigate();
 
     let [isLoading, setLoading] = useState(true);
     let [isSaving, setSaving] = useState(false);
@@ -42,7 +46,12 @@ let BookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
                 let res = await axios.get('/api/Books/BookDetails', { params: { isbn, pageNr, category } });
 
-                setBook(res.data.item);
+                let { item } = res.data;
+
+                setBook({
+                    ...item,
+                    notes: item.notes ?? ''
+                });
 
             } catch (error) { }
             finally {
@@ -56,12 +65,17 @@ let BookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 
     let updateBook = (newBook: IBook) => {
-        updateBook(newBook)
+        setBook(newBook)
     }
 
     let saveBook = async () => {
         try {
             setSaving(true);
+
+            await axios.post('/api/Books/Save', book);
+
+            enqueueSnackbar("Book saved", { variant: "success" })
+
         } catch (err) { }
         finally {
             setSaving(false);
@@ -75,8 +89,8 @@ let BookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 isLoading,
                 isSaving,
                 book,
-                
-                updateBook, 
+
+                updateBook,
                 saveBook
             }}
         >

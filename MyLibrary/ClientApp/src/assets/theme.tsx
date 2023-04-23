@@ -54,38 +54,38 @@ const theme = createTheme({
         }
     },
     components: {
-        MuiButton: {
-            styleOverrides: {
-                contained: {
-                    color: '#4a4a4a',
-                    borderRadius: 0,
-                    backgroundColor: '#fafafa',
-                    '&:hover': {
-                        backgroundColor: '#d5d5d5'
-                    }
-                },
-                containedPrimary: {
-                    color: '#4a4a4a',
-                    borderRadius: 0,
-                    backgroundColor: '#ffad33',
-                    '&:hover': {
-                        backgroundColor: '#dd8500'
-                    }
-                },
-                outlinedPrimary: {
-                    color: '#fff',
-                    borderRadius: 0,
-                    backgroundColor: '#000',
-                    border: '2px solid #fff',
-                    '&:hover': {
-                        borderRadius: 0,
-                        color: '#000',
-                        backgroundColor: '#fff',
-                        border: '2px solid #000',
-                    }
-                },
-            }
-        },
+        // MuiButton: {
+        //     styleOverrides: {
+        //         contained: {
+        //             color: '#4a4a4a',
+        //             borderRadius: 0,
+        //             backgroundColor: '#fafafa',
+        //             '&:hover': {
+        //                 backgroundColor: '#d5d5d5'
+        //             }
+        //         },
+        //         containedPrimary: {
+        //             color: '#4a4a4a',
+        //             borderRadius: 0,
+        //             backgroundColor: '#ffad33',
+        //             '&:hover': {
+        //                 backgroundColor: '#dd8500'
+        //             }
+        //         },
+        //         outlinedPrimary: {
+        //             color: '#fff',
+        //             borderRadius: 0,
+        //             backgroundColor: '#000',
+        //             border: '2px solid #fff',
+        //             '&:hover': {
+        //                 borderRadius: 0,
+        //                 color: '#000',
+        //                 backgroundColor: '#fff',
+        //                 border: '2px solid #000',
+        //             }
+        //         },
+        //     }
+        // },
         MuiChip: {
             styleOverrides: {
                 outlinedPrimary: {

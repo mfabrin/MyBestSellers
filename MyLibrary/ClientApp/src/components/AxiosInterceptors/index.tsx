@@ -1,22 +1,11 @@
-import { useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
-// import { authContext } from 'helpers/services';
-
+import { enqueueSnackbar } from 'notistack';
 
 let AxiosInterceptors = () => {
     let navigate = useNavigate();
-    let { enqueueSnackbar } = useSnackbar();
-
-    // let authService = useContext(authContext);
 
     axios.interceptors.request.use(async config => {
-        // let token = await authService.getToken();
-
-        // if (config.headers)
-        //     config.headers['Authorization'] = `Bearer ${token}`;
-
         return config;
     })
 
@@ -32,8 +21,9 @@ let AxiosInterceptors = () => {
                             enqueueSnackbar(er, { variant: 'error' });
                         })
                     } else {
-                        for (let i in data.errors)
+                        for (let i in data.errors) {
                             enqueueSnackbar(data.errors[i], { variant: 'error' });
+                        }
                     }
                     break;
 

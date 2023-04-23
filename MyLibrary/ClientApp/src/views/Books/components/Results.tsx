@@ -1,23 +1,24 @@
 import { useContext } from 'react';
-import { Grid, Typography, Card, CardHeader, CardMedia, CardContent, CardActions, IconButton, CardActionArea } from '@mui/material';
-import { Favorite as FavoriteIcon } from '@mui/icons-material';
+import { Grid, Typography, Card, CardMedia, CardContent, CardActions, CardActionArea, Checkbox } from '@mui/material';
+import { Favorite, FavoriteBorder } from '@mui/icons-material';
 import { CircleLoader } from 'components'
 import { booksContext } from '../BooksProvider';
 import { useNavigate } from 'react-router-dom';
+import theme from 'assets/theme';
 
 
 let Results = () => {
     let navigate = useNavigate();
 
-    let { isLoading, search, books } = useContext(booksContext);
+    let { isLoading, search, books, updateFavourite } = useContext(booksContext);
 
     return (
         <>
             {isLoading && <CircleLoader />}
             {isLoading === false &&
-                <Grid container>
+                <Grid container sx={{ paddingTop: theme.spacing(1) }}>
                     {books.map(book =>
-                        <Grid item xs={12} sm={4} md={6} lg={2}>
+                        <Grid key={book.isbn} item xs={12} sm={4} md={6} lg={2}>
                             <Card>
                                 <CardActionArea onClick={() => navigate(`/book/${book.category}/${search.pageNr}/${book.isbn}/`)}>
                                     <CardMedia
@@ -35,9 +36,12 @@ let Results = () => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions disableSpacing>
-                                    <IconButton aria-label="add to favorites">
-                                        <FavoriteIcon />
-                                    </IconButton>
+                                    <Checkbox
+                                        icon={<FavoriteBorder />}
+                                        checkedIcon={<Favorite />}
+                                        checked={book.isFavourite}
+                                        onChange={async (e) => await updateFavourite(book.isbn)}
+                                    />
                                 </CardActions>
                             </Card>
                         </Grid>

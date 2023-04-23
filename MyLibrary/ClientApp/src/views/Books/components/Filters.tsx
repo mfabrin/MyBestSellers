@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { Grid, TextField, MenuItem, Button } from '@mui/material';
+import { Search } from '@mui/icons-material'
 import { FilterContainer } from "components";
 import { booksContext } from '../BooksProvider';
 import { applicationContext } from 'helpers/services';
@@ -21,7 +22,7 @@ let Filters = () => {
                     })}
                 />
             </Grid>
-            <Grid item>
+            <Grid item xs={2}>
                 <TextField
                     select
                     variant="standard"
@@ -36,7 +37,9 @@ let Filters = () => {
                 </TextField>
             </Grid>
             <Grid item>
-                <Button type="submit" color="secondary" onClick={() => doSearch(search)}>Search</Button>
+                <Button type="submit" variant="contained" color="primary" onClick={() => doSearch(search)}>
+                    <Search />
+                </Button>
             </Grid>
         </FilterContainer>
     )

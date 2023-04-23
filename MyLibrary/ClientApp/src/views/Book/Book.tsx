@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { CardMedia, Grid } from "@mui/material";
 import { bookContext } from './BookProvider';
-import { Header, BookInfo } from './components'
+import { Header, BookInfo, MyData } from './components'
 
 
 let Book = () => {
@@ -23,8 +23,13 @@ let Book = () => {
                             />
                         </Grid>
                         <Grid item xs>
-                            <Grid item xs={12}>
-                                <BookInfo />
+                            <Grid container>
+                                <Grid item xs={12}>
+                                    <BookInfo />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <MyData />
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>

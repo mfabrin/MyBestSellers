@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { applicationContext } from 'helpers/services';
 
 interface IContext {
     isLoading: boolean
@@ -12,6 +11,7 @@ interface IContext {
     updateSearch: (newSearch: ISearch) => void
     doSearch: (values: ISearch) => void
     changePage: (pageNr: number) => void
+    updateFavourite: (isbn: string) => Promise<void>
 }
 
 interface ISearch {
@@ -29,6 +29,7 @@ interface IBook {
     image: string
     category: string
     description: string
+    isFavourite: boolean
 }
 
 export let booksContext = React.createContext({} as IContext);
@@ -39,8 +40,6 @@ let BooksProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     let location = useLocation();
     let navigate = useNavigate();
 
-    let { bookCategories } = useContext(applicationContext);
-
     let [isLoading, setLoading] = useState(true);
 
     let [books, setBooks] = useState<IBook[]>([]);
@@ -48,7 +47,7 @@ let BooksProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     let [search, setSearch] = useState<ISearch>({
         isbn: '',
-        category: bookCategories[0].key,
+        category: 'series-books',
         pageNr: 0,
         pageSize: 20
     })
@@ -97,7 +96,7 @@ let BooksProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         try {
             setLoading(true);
 
-            let res = await axios.get('/api/Books/BookList', { params: search });
+            let res = await axios.get('/api/Books/BookList', { params: request });
 
             let { items, recordCount } = res.data;
 
@@ -120,6 +119,22 @@ let BooksProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         navigate(location.pathname, { state: { search: request } });
     }
 
+    let updateFavourite = async (isbn: string) => {
+        try {
+            await axios.put(`/api/Books/UpdateFavourite?isbn=${isbn}`);
+
+            let book = books.find(x => x.isbn === isbn) as IBook;
+            let bookIdx = books.findIndex(x => x.isbn === isbn);
+
+            let newBook = { ...book, isFavourite: !book?.isFavourite };
+
+            books.splice(bookIdx, 1, newBook);
+
+            setBooks([...books]);
+
+        } catch (err) { }
+    }
+
 
     return (
         <Provider
@@ -127,11 +142,12 @@ let BooksProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 isLoading,
                 search,
                 books,
-                totalItems, 
+                totalItems,
 
                 updateSearch,
                 doSearch,
-                changePage
+                changePage,
+                updateFavourite
             }}
         >
             {children}

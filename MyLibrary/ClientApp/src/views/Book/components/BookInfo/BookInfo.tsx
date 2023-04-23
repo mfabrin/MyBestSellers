@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Grid, Typography } from "@mui/material";
 import { bookContext } from "../../BookProvider";
 import Header from './Header';
+import Info from './Info';
 
 let BookInfo = () => {
     let { book } = useContext(bookContext);
@@ -12,25 +13,11 @@ let BookInfo = () => {
                 <Header title='Overview' />
             </Grid>
             <Grid item xs={12}>
-                <Grid container sx={{ paddingLeft: 4 }}>
-                    <Grid item xs={2}>
-                        <Typography>Author</Typography>
-                    </Grid>
-                    <Grid item xs={10}>
-                        <Typography>{book.author}</Typography>
-                    </Grid>
-                    {/* <Grid item xs={2}>
-                        <Typography>Company</Typography>
-                    </Grid>
-                    <Grid item xs={10}>
-                        <Typography>{service.employee.company}</Typography>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Typography>Department</Typography>
-                    </Grid>
-                    <Grid item xs={10}>
-                        <Typography>{service.employee.department}</Typography>
-                    </Grid> */}
+                <Grid container alignItems="center" sx={{ paddingLeft: 4 }}>
+                    <Info title="ISBN" value={book.isbn} />
+                    <Info title="Author" value={book.author} />
+                    <Info title="Contributor" value={book.contributor} />
+                    <Info title="Description" value={book.description} />
                 </Grid>
             </Grid>
         </Grid>
