@@ -11,6 +11,13 @@ namespace MyLibrary.Application.DTO.Book
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ISBN is mandatory field")]
         public string ISBN { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Category is mandatory field")]
+        public string Category { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "PublishDate is mandatory field")]
+        public string PublishDate { get; set; }
+
         public int? Rank { get; set; }
         public bool IsRead { get; set; }
         public bool IsFavourite { get; set; }

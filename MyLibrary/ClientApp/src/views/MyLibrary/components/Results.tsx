@@ -2,15 +2,15 @@ import { useContext } from 'react';
 import { Grid, Typography, Card, CardMedia, CardContent, CardActions, CardActionArea, Checkbox } from '@mui/material';
 import { Favorite, FavoriteBorder } from '@mui/icons-material';
 import { CircleLoader } from 'components'
-import { booksContext } from '../BooksProvider';
-import { useNavigate } from 'react-router-dom';
+import { myLibraryContext } from '../MyLibraryProvider';
+import { Link, useNavigate } from 'react-router-dom';
 import theme from 'assets/theme';
 
 
 let Results = () => {
     let navigate = useNavigate();
 
-    let { isLoading, search, books, updateFavourite } = useContext(booksContext);
+    let { isLoading, search, books, updateFavourite } = useContext(myLibraryContext);
 
     return (
         <>
@@ -25,20 +25,20 @@ let Results = () => {
                     {books.map(book =>
                         <Grid key={book.isbn} item xs={12} sm={4} md={6} lg={2}>
                             <Card>
-                                <CardActionArea onClick={() => navigate(`/book/${book.category}/${search.pageNr}/${book.isbn}/`)}>
-                                    <CardMedia
-                                        component="img"
-                                        image={book.image}
-                                        alt={book.title}
-                                    />
-                                </CardActionArea>
-                                <CardContent>
-                                    <Typography color="text.secondary">
-                                        {book.title}
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {book.description}
-                                    </Typography>
+                                <Link to={`/book/${book.isbn}/${book.category}/${book.publishDate}/`}>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            component="img"
+                                            image={book.image}
+                                            alt={book.title}
+                                            height="250"
+                                            sx={{ padding: "1em 1em 0 1em", objectFit: "contain" }}
+                                        />
+                                    </CardActionArea>
+                                </Link>
+                                <CardContent sx={{ height: 80 }}>
+                                    <Typography>{book.title}</Typography>
+                                    <Typography color="text.secondary">by {book.author}</Typography>
                                 </CardContent>
                                 <CardActions disableSpacing>
                                     <Checkbox

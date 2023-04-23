@@ -15,5 +15,7 @@ namespace MyLibrary.Domain.Interfaces
         Task InsertAsync(TEntity entity);
 
         IUpdateAction<TEntity> Update(TEntity entity);
+
+        Task Delete(TEntity entity);
     }
 }

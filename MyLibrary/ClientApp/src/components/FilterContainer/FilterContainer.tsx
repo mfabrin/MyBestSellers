@@ -10,7 +10,7 @@ let FilterContainer: React.FC<{ stopPropagation?: boolean, children: React.React
                 e.stopPropagation();
         }
         }>
-            <Grid container alignItems='center'>
+            <Grid container alignItems='flex-end'>
                 {children}
             </Grid>
         </form>

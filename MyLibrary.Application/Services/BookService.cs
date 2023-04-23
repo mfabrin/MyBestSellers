@@ -1,5 +1,6 @@
 ﻿using MyLibrary.Application.DTO.Book;
 using MyLibrary.Application.OperationResults;
+using MyLibrary.Common.Helpers;
 using MyLibrary.Domain.AggregateRoots;
 using MyLibrary.Domain.Interfaces;
 using MyLibrary.Infrastructure.NYTimes;
@@ -18,13 +19,54 @@ namespace MyLibrary.Application.Services
         }
 
 
-        public async Task<ItemListResponse<BooksResponse>> GetBooks(string? isbn, int pageNr, string category)
+
+        public async Task<ItemResponse<BestSellersResponse>> GetBestSellersOverview(string publishDate)
         {
-            var timesResponse = await _timesManager.GetCategoryBooks(pageNr, category);
+            var timesResponse = await _timesManager.GetBestSellersOverview(publishDate);
 
-            if (string.IsNullOrWhiteSpace(isbn) == false)
-                timesResponse.results.books = timesResponse.results.books.Where(x => x.primary_isbn13 == isbn).ToArray();
+            var isbns = timesResponse.results.lists
+                .SelectMany(x => x.books)
+                .Select(x => x.primary_isbn13)
+                .ToList();
 
+            var myBooks = await _repBooks.Get(x => isbns.Contains(x.ISBN13));
+
+
+            var response = new BestSellersResponse
+            {
+                Categories = timesResponse.results.lists.Select(x => x.list_name_encoded).Distinct().ToList(),
+                Books = new List<BestSellersResponse.Book>()
+            };
+
+
+            foreach (var category in timesResponse.results.lists)
+            {
+                foreach (var book in category.books)
+                {
+                    var res = new BestSellersResponse.Book
+                    {
+                        Category = category.list_name_encoded,
+                        CategoryName = category.display_name,
+                        PublishDate = category.updated,
+                        ISBN = book.primary_isbn13,
+                        Title = book.title,
+                        Author = book.author,
+                        Contributor = book.contributor,
+                        Image = book.book_image,
+                        Description = book.description,
+                        IsFavourite = myBooks.SingleOrDefault(y => book.primary_isbn13 == y.ISBN13 && y.Category == category.list_name_encoded && y.PublishDate == publishDate)?.IsFavourite ?? false
+                    };
+
+                    response.Books.Add(res);
+                }
+            }
+
+            return new ItemResponse<BestSellersResponse>(response);
+        }
+
+        public async Task<ItemResponse<BestSellersResponse>> GetBestSellers(string publishDate, string category)
+        {
+            var timesResponse = await _timesManager.GetBestSellers(publishDate, category);
 
             var isbns = timesResponse.results.books
                 .Select(x => x.primary_isbn13)
@@ -33,58 +75,124 @@ namespace MyLibrary.Application.Services
             var myBooks = await _repBooks.Get(x => isbns.Contains(x.ISBN13));
 
 
-            var response = timesResponse.results.books
-                .Select(x => new BooksResponse
-                {
-                    ISBN = x.primary_isbn13,
-                    Title = x.title,
-                    Author = x.author,
-                    Contributor = x.contributor,
-                    Image = x.book_image,
-                    Category = category,
-                    Description = x.description,
-                    IsFavourite = myBooks.SingleOrDefault(y => x.primary_isbn13 == y.ISBN13)?.IsFavourite ?? false
-                }).ToList();
+            var response = new BestSellersResponse
+            {
+                Categories = new List<string>() { category },
+                Books = timesResponse.results.books
+                    .Select(x => new BestSellersResponse.Book
+                    {
+                        Category = category,
+                        CategoryName = timesResponse.results.display_name,
+                        PublishDate = timesResponse.results.updated,
+                        ISBN = x.primary_isbn13,
+                        Title = x.title,
+                        Author = x.author,
+                        Contributor = x.contributor,
+                        Image = x.book_image,
+                        Description = x.description,
+                        IsFavourite = myBooks.SingleOrDefault(y => x.primary_isbn13 == y.ISBN13)?.IsFavourite ?? false
+                    }).ToList()
+            };
 
-            return new ItemListResponse<BooksResponse>(response).WithCount(timesResponse.num_results);
+            return new ItemResponse<BestSellersResponse>(response);
         }
 
-        public async Task<ItemResponse<BookResponse>> GetBook(string isbn, int pageNr, string category)
+        public async Task<ItemListResponse<MyLibraryResponse>> GetMyLibrary(string? category, string? title)
         {
-            var timesResponse = await _timesManager.GetCategoryBooks(pageNr, category);
+            var predicate = PredicateBuilder.True<Book>();
 
-            var timesBook = timesResponse.results.books.SingleOrDefault(x => x.primary_isbn13 == isbn);
+            if (string.IsNullOrWhiteSpace(category) == false)
+                predicate = predicate.And(x => x.Category == category);
 
-            if (timesBook == null)
-                throw new ArgumentException("Book not found");
+            if (string.IsNullOrWhiteSpace(title) == false)
+            {
+                title = title.Trim().ToUpper();
+                predicate = predicate.And(x => x.Title.ToUpper().Contains(title));
+            }
 
 
-            var myBook = await _repBooks.GetSingleOrDefaultAsync(x => x.ISBN13 == isbn);
+            var myBooks = await _repBooks.Get(predicate);
+
+            var response = myBooks
+                .Select(x => new MyLibraryResponse
+                {
+                    ISBN = x.ISBN13,
+                    Author = x.Author,
+                    Category = x.Category,
+                    PublishDate = x.PublishDate,
+                    Contributor = x.Contributor,
+                    Description = x.Description,
+                    Image = x.Image,
+                    IsFavourite = x.IsFavourite,
+                    Title = x.Title
+                }).ToList();
+
+            return new ItemListResponse<MyLibraryResponse>(response);
+        }
+
+        public async Task<ItemResponse<BookResponse>> GetBook(string isbn, string category, string publishDate)
+        {
+            var book = await _repBooks.GetSingleOrDefaultAsync(x => x.ISBN13 == isbn && x.Category == category && x.PublishDate == publishDate);
+
+            if (book == null)
+            {
+                var timesResponse = await _timesManager.GetBestSellers(publishDate, category);
+
+                var timesBook = timesResponse.results.books.Single(x => x.primary_isbn13 == isbn);
+
+                book = new Book(
+                    isbn13: timesBook.primary_isbn13,
+                    category: category,
+                    publishDate: publishDate,
+                    image: timesBook.book_image,
+                    author: timesBook.author,
+                    contributor: timesBook.contributor,
+                    title: timesBook.title,
+                    description: timesBook.description
+                );
+            }
 
 
             var response = new BookResponse
             {
-                ISBN = timesBook.primary_isbn13,
-                Title = timesBook.title,
-                Author = timesBook.author,
-                Contributor = timesBook.contributor,
-                Image = timesBook.book_image,
-                Description = timesBook.description,
-                IsFavourite = myBook?.IsFavourite ?? false,
-                IsRead = myBook?.IsRead ?? false,
-                Notes = myBook?.Notes,
-                Rank = myBook?.Rank.GetValueOrDefault() ?? 0
+                ISBN = book.ISBN13,
+                Title = book.Title,
+                Author = book.Author,
+                Contributor = book.Contributor,
+                Category = book.Category,
+                PublishDate = book.PublishDate,
+                Image = book.Image,
+                Description = book.Description,
+                IsFavourite = book.IsFavourite,
+                IsRead = book.IsRead,
+                Notes = book.Notes,
+                Rank = book.Rank.GetValueOrDefault()
             };
 
             return new ItemResponse<BookResponse>(response);
         }
 
-        public async Task<SaveResponse> SaveBookAsFavourite(string isbn)
+        public async Task<SaveResponse> UpdateLibrary(MyLibraryUpdateRequest request)
         {
-            var book = await _repBooks.GetSingleOrDefaultAsync(x => x.ISBN13 == isbn);
+            var book = await _repBooks.GetSingleOrDefaultAsync(x => x.ISBN13 == request.ISBN && x.Category == request.Category && x.PublishDate == request.PublishDate);
 
             if (book == null)
-                book = new Book(isbn);
+            {
+                var timesResponse = await _timesManager.GetBestSellers(request.PublishDate, request.Category);
+
+                var timesBook = timesResponse.results.books.Single(x => x.primary_isbn13 == request.ISBN);
+
+                book = new Book(
+                    isbn13: timesBook.primary_isbn13,
+                    category: request.Category,
+                    publishDate: request.PublishDate,
+                    image: timesBook.book_image,
+                    author: timesBook.author,
+                    contributor: timesBook.contributor,
+                    title: timesBook.title,
+                    description: timesBook.description
+                );
+            }
 
 
             if (book.IsFavourite == true)
@@ -103,12 +211,28 @@ namespace MyLibrary.Application.Services
             return new SaveResponse(1);
         }
 
-        public async Task<SaveResponse> SaveBook(BookSaveRequest request)
+        public async Task<SaveResponse> UpdateBook(BookSaveRequest request)
         {
-            var book = await _repBooks.GetSingleOrDefaultAsync(x => x.ISBN13 == request.ISBN);
+            var book = await _repBooks.GetSingleOrDefaultAsync(x => x.ISBN13 == request.ISBN && x.Category == request.Category && x.PublishDate == request.PublishDate);
 
             if (book == null)
-                book = new Book(request.ISBN);
+            {
+                var timesResponse = await _timesManager.GetBestSellers(request.PublishDate, request.Category);
+
+                var timesBook = timesResponse.results.books.Single(x => x.primary_isbn13 == request.ISBN);
+
+                book = new Book(
+                    isbn13: timesBook.primary_isbn13,
+                    category: request.Category,
+                    publishDate: request.PublishDate,
+                    image: timesBook.book_image,
+                    author: timesBook.author,
+                    contributor: timesBook.contributor,
+                    title: timesBook.title,
+                    description: timesBook.description
+                );
+            }
+
 
             book.Update(
                 rank: request.Rank,
@@ -128,6 +252,18 @@ namespace MyLibrary.Application.Services
                     .DoUpdateAsync();
 
             return new SaveResponse(1);
+        }
+
+        public async Task<DeleteResponse> DeleteBook(Guid id)
+        {
+            var book = await _repBooks.GetSingleOrDefaultAsync(x => x.Id == id);
+
+            if (book == null)
+                throw new ArgumentException("Book not found");
+
+            await _repBooks.Delete(book);
+
+            return new DeleteResponse(true);
         }
     }
 }

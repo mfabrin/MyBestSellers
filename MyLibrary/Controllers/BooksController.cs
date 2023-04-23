@@ -17,30 +17,47 @@ namespace MyLibrary.WebApp.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> BookList(string? isbn, int pageNr, string category)
+        public async Task<IActionResult> BestSellers(string publishDate, string? category)
         {
-            var response = await _bookService.GetBooks(isbn, pageNr, category);
+            var response = string.IsNullOrWhiteSpace(category)
+                ? await _bookService.GetBestSellersOverview(publishDate)
+                : await _bookService.GetBestSellers(publishDate, category);
+
             return Ok(response);
         }
 
         [HttpGet]
-        public async Task<IActionResult> BookDetails(string isbn, int pageNr, string category)
+        public async Task<IActionResult> MyLibrary(string? category, string? title)
         {
-            var response = await _bookService.GetBook(isbn, pageNr, category);
+            var response = await _bookService.GetMyLibrary(category, title);
             return Ok(response);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateFavourite(string isbn)
+        [HttpGet]
+        public async Task<IActionResult> Book(string isbn, string category, string publishDate)
         {
-            var response = await _bookService.SaveBookAsFavourite(isbn);
+            var response = await _bookService.GetBook(isbn, category, publishDate);
             return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Save(BookSaveRequest request)
+        public async Task<IActionResult> UpdateLibrary(MyLibraryUpdateRequest request)
         {
-            var response = await _bookService.SaveBook(request);
+            var response = await _bookService.UpdateLibrary(request);
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(BookSaveRequest request)
+        {
+            var response = await _bookService.UpdateBook(request);
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var response = await _bookService.DeleteBook(id);
             return Ok(response);
         }
     }

@@ -16,19 +16,38 @@ namespace MyLibrary.Infrastructure.NYTimes
         }
 
 
-        public async Task<CategoryBooksResponse> GetCategoryBooks(int pageNr, string category, string publishDate = "current")
+
+
+        
+        public async Task<BestSellersOverviewResponse> GetBestSellersOverview(string publishDate)
+        {
+            var client = GetClient();
+
+            var restRequest = new RestRequest($"/lists/full-overview.json");
+
+            restRequest.AddParameter("api-key", _settings.Value.APIKey);
+            restRequest.AddParameter("publishDate", publishDate);
+
+            var response = await client.ExecuteAsync<BestSellersOverviewResponse>(restRequest);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception("Error calling API for best sellers overview", response.ErrorException);
+
+            return response.Data;
+        }
+
+        public async Task<BestSellersResponse> GetBestSellers(string publishDate, string category)
         {
             var client = GetClient();
 
             var restRequest = new RestRequest($"/lists/{publishDate}/{category}.json");
 
             restRequest.AddParameter("api-key", _settings.Value.APIKey);
-            restRequest.AddParameter("offset", pageNr);
 
-            var response = await client.ExecuteAsync<CategoryBooksResponse>(restRequest);
+            var response = await client.ExecuteAsync<BestSellersResponse>(restRequest);
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception("Error calling API for books", response.ErrorException);
+                throw new Exception("Error calling API for best sellers", response.ErrorException);
 
             return response.Data;
         }

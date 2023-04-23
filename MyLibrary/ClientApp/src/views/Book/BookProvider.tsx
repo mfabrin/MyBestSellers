@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { enqueueSnackbar } from 'notistack';
 
 interface IContext {
@@ -17,6 +17,7 @@ interface IBook {
     isbn: string
     image: string
     title: string
+    category: string
     author: string
     contributor: string
     description: string
@@ -31,7 +32,7 @@ export let bookContext = React.createContext({} as IContext);
 let { Provider } = bookContext;
 
 let BookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    let { isbn, pageNr, category } = useParams<{ isbn: string, pageNr: string, category: string }>();
+    let { isbn, category, publishDate } = useParams<{ isbn: string, category: string, publishDate: string }>();
 
     let [isLoading, setLoading] = useState(true);
     let [isSaving, setSaving] = useState(false);
@@ -44,7 +45,7 @@ let BookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             try {
                 setLoading(true);
 
-                let res = await axios.get('/api/Books/BookDetails', { params: { isbn, pageNr, category } });
+                let res = await axios.get('/api/Books/Book', { params: { isbn, category, publishDate } });
 
                 let { item } = res.data;
 
@@ -59,7 +60,7 @@ let BookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             }
         }
 
-        if (isbn && pageNr && category)
+        if (isbn && category && publishDate)
             getBook();
     }, [])
 
@@ -72,7 +73,7 @@ let BookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         try {
             setSaving(true);
 
-            await axios.post('/api/Books/Save', book);
+            await axios.post('/api/Books/Update', book);
 
             enqueueSnackbar("Book saved", { variant: "success" })
 

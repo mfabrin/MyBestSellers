@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Infrastructure.NYTimes.Models
 {
-    public class CategoryBooksResponse
+    public class BestSellersResponse
     {
         public string status { get; set; }
         public string copyright { get; set; }

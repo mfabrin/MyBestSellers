@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using MyLibrary.Common.Settings;
 using MyLibrary.Domain;
 using MyLibrary.Domain.Interfaces;
+using System;
 using System.Linq.Expressions;
 
 namespace MyLibrary.Infrastructure.Repository
@@ -93,6 +94,12 @@ namespace MyLibrary.Infrastructure.Repository
         public async Task<long> GetCount(Expression<Func<TEntity, bool>> predicate)
         {
             return await _collection.CountDocumentsAsync<TEntity>(predicate);
+        }
+
+        public async Task Delete(TEntity entity)
+        {
+            var filter = Builders<TEntity>.Filter.Eq("Id", entity.Id);
+            await _collection.DeleteOneAsync(filter);
         }
     }
 }

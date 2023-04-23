@@ -1,25 +1,28 @@
 import { Link, useLocation } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Stack, Grid, List, ListItem, ListItemText } from '@mui/material';
+import { AppBar, Toolbar, Grid, List, ListItem, ListItemText } from '@mui/material';
 import theme from 'assets/theme';
+
+interface IPage {
+    url: string
+    title: string
+}
 
 let NavBar = () => {
     let location = useLocation();
+
+    const pages: IPage[] = [
+        { url: '/bestsellers', title: 'Best Sellers' },
+        { url: '/mylibrary', title: 'My Library' }
+    ]
 
     return (
         <AppBar color="inherit" elevation={0} position="sticky" style={{ borderBottom: '1px solid #eeeeee' }}>
             <Toolbar variant="dense" >
                 <Grid container spacing={1} alignItems='center'>
-                    <Grid item xs={1}>
-                        <Stack direction="row" display='flex'>
-                            <Link to="/">
-                                <img src="https://picsum.photos/200/200" height="56" />
-                            </Link>
-                            {process.env.REACT_APP_ENV !== "production" &&
-                                <Typography>
-                                    <b>{process.env.REACT_APP_ENV}</b>
-                                </Typography>
-                            }
-                        </Stack>
+                    <Grid item>
+                        <Link to="/bestsellers">
+                            <img height={48} src="/logo.png" style={{ paddingTop: 8 }} />
+                        </Link>
                     </Grid>
                     <Grid item xs>
                         <List
@@ -27,21 +30,23 @@ let NavBar = () => {
                             component="nav"
                             style={{ listStyle: 'none', display: 'inline-flex' }}
                         >
-                            <ListItem style={{ textTransform: 'uppercase', }} component={Link} to='/books'>
-                                <ListItemText
-                                    primary={
-                                        <strong style={{
-                                            fontSize: 13,
-                                            fontWeight: 800,
-                                            paddingBottom: '16px',
-                                            borderBottom: location.pathname === '/books' ? `2px solid ${theme.palette.primary.main}` : '0px',
-                                            color: location.pathname === '/books' ? `${theme.palette.primary.main}` : 'black',
-                                        }}>
-                                            Books
-                                        </strong>
-                                    }
-                                />
-                            </ListItem>
+                            {pages.map(page =>
+                                <ListItem key={page.url} style={{ textTransform: 'uppercase', }} component={Link} to={page.url}>
+                                    <ListItemText
+                                        primary={
+                                            <span style={{
+                                                fontSize: 13,
+                                                paddingBottom: 16,
+                                                whiteSpace: 'nowrap',
+                                                borderBottom: location.pathname === page.url ? `2px solid ${theme.palette.primary.main}` : '0px',
+                                                color: location.pathname === page.url ? `${theme.palette.primary.main}` : 'black',
+                                            }}>
+                                                {page.title}
+                                            </span>
+                                        }
+                                    />
+                                </ListItem>
+                            )}
                         </List>
                     </Grid>
                 </Grid>
