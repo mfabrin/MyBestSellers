@@ -15,6 +15,8 @@ interface IContext {
 
 interface ISearch {
     category: string
+    title: string
+    author: string
 }
 
 interface IBook {
@@ -40,7 +42,9 @@ let MyLibraryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
     let [totalItems, setTotalItems] = useState(0);
 
     let [search, setSearch] = useState<ISearch>({
-        category: ''
+        category: '',
+        title: '',
+        author: ''
     })
 
 

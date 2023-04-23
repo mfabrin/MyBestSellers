@@ -28,8 +28,8 @@ let MyData = () => {
                         value={book.isRead}
                         onChange={(e) => updateBook({ ...book, isRead: e.target.value === "true" })}
                     >
-                        <FormControlLabel value={true} control={<Radio />} label="Yes" />
                         <FormControlLabel value={false} control={<Radio />} label="No" />
+                        <FormControlLabel value={true} control={<Radio />} label="Yes" />
                     </RadioGroup>
                 }
             />

@@ -65,7 +65,6 @@ namespace MyLibrary.Infrastructure.Repository
             return await cursor.Project(projection).ToListAsync();
         }
 
-
         public async Task InsertAsync(TEntity entity)
         {
             await _collection.InsertOneAsync(entity);

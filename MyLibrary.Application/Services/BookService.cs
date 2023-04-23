@@ -20,9 +20,9 @@ namespace MyLibrary.Application.Services
 
 
 
-        public async Task<ItemResponse<BestSellersResponse>> GetBestSellersOverview(string publishDate)
+        public async Task<ItemResponse<BestSellersResponse>> GetBestSellersOverview(DateTime publishDate)
         {
-            var timesResponse = await _timesManager.GetBestSellersOverview(publishDate);
+            var timesResponse = await _timesManager.GetBestSellersOverview(publishDate.ToString("yyyy-MM-dd"));
 
 
             var response = new BestSellersResponse
@@ -49,9 +49,9 @@ namespace MyLibrary.Application.Services
             return new ItemResponse<BestSellersResponse>(response);
         }
 
-        public async Task<ItemResponse<BestSellersResponse>> GetBestSellersByCategory(string publishDate, string category)
+        public async Task<ItemResponse<BestSellersResponse>> GetBestSellersByCategory(DateTime publishDate, string category)
         {
-            var timesResponse = await _timesManager.GetBestSellers(publishDate, category);
+            var timesResponse = await _timesManager.GetBestSellers(publishDate.ToString("yyyy-MM-dd"), category);
 
             var response = new BestSellersResponse
             {
@@ -79,12 +79,26 @@ namespace MyLibrary.Application.Services
             return new ItemResponse<BestSellersResponse>(response);
         }
 
-        public async Task<ItemListResponse<MyLibraryResponse>> GetMyLibrary(string? category)
+        public async Task<ItemListResponse<MyLibraryResponse>> GetMyLibrary(string? category, string? title, string? author)
         {
             var predicate = PredicateBuilder.True<Book>();
 
+            predicate = predicate.And(x => x.IsFavourite != false || x.IsRead != false);
+
             if (string.IsNullOrWhiteSpace(category) == false)
                 predicate = predicate.And(x => x.Category == category);
+
+            if (string.IsNullOrWhiteSpace(title) == false)
+            {
+                title = title.Trim().ToUpper();
+                predicate = predicate.And(x => x.Title.ToUpper().Contains(title));
+            }
+
+            if (string.IsNullOrWhiteSpace(author) == false)
+            {
+                author = author.Trim().ToUpper();
+                predicate = predicate.And(x => x.Author.ToUpper().Contains(author));
+            }
 
 
             var myBooks = await _repBooks.Get(predicate);

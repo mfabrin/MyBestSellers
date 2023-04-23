@@ -1,33 +1,24 @@
 import { useContext } from 'react';
-import { Grid, TextField, MenuItem, Button, Pagination, Autocomplete } from '@mui/material';
+import { Grid, TextField, Button, Autocomplete } from '@mui/material';
 import { Search } from '@mui/icons-material'
 import { FilterContainer } from "components";
 import { bestSellersContext } from '../BestSellersProvider';
 import { applicationContext } from 'helpers/services';
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
 
 let Filters = () => {
     let { bookCategories } = useContext(applicationContext);
-    let { search, categories, updateSearch, doSearch } = useContext(bestSellersContext);
+    let { search, categories, updateSearch, searchBestSellers } = useContext(bestSellersContext);
 
     return (
         <FilterContainer>
             <Grid item xs={2}>
-                {/* <DatePicker
-                    label="Basic date picker"
-                    // views={['month', 'year']}
-                    value={search.publishDate}
-                    onChange={(newValue) => updateSearch({ ...search, publishDate: newValue || dayjs().startOf('month').toDate() })}
-                /> */}
-                <TextField
-                    variant="standard"
+                <DatePicker
                     label="Publish date"
                     value={search.publishDate}
-                    onChange={(e) => updateSearch({
-                        ...search,
-                        publishDate: e.target.value
-                    })}
+                    views={['year', 'month']}
+                    onChange={(newValue: any) => updateSearch({ ...search, publishDate: newValue })}
+                    renderInput={(params: any) => <TextField variant="standard" {...params} />}
                 />
             </Grid>
             <Grid item xs={2}>
@@ -42,7 +33,7 @@ let Filters = () => {
                 />
             </Grid>
             <Grid item xs>
-                <Button type="submit" variant="contained" color="primary" onClick={() => doSearch(search)}>
+                <Button type="submit" variant="contained" color="primary" onClick={async () => searchBestSellers(search)}>
                     <Search />
                 </Button>
             </Grid>

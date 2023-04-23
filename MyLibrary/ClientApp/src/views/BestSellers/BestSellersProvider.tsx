@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs';
 
 interface IContext {
@@ -10,12 +10,11 @@ interface IContext {
     bestSellers: ICategory[]
 
     updateSearch: (newSearch: ISearch) => void
-    doSearch: (values: ISearch) => void
-    changePage: (pageNr: number) => void
+    searchBestSellers: (values: ISearch) => Promise<void>
 }
 
 interface ISearch {
-    publishDate: string
+    publishDate: dayjs.Dayjs
     category: string
 }
 
@@ -48,49 +47,23 @@ let BestSellersProvider: React.FC<{ children: React.ReactNode }> = ({ children }
     let [bestSellers, setBestSellers] = useState<ICategory[]>([]);
 
     let [search, setSearch] = useState<ISearch>({
-        publishDate: '2023-04-01',
+        publishDate: dayjs().startOf('month'),
         category: ''
     })
 
-
     useEffect(() => {
-        if (location.state)
-            processState(location.state);
-
-    }, [location.state])
-
-
-    if (!location.state)
-        return <Navigate to={location.pathname} state={{ search: search }} replace={true} />
-
-
-    let processState = (state: any) => {
-        if (state.search) {
-            setSearch({
-                ...search,
-                ...state.search
-            });
-
-            searchBestSellers({
-                ...search,
-                ...state.search
-            });
-        }
-    }
-
-    let doSearch = (values: ISearch) => {
-        navigate(location.pathname, { state: { search: values } });
-    }
+        searchBestSellers(search)
+    }, [search])
 
     let updateSearch = (newSearch: ISearch) => {
         setSearch(newSearch);
     }
 
-    let searchBestSellers = async (request: ISearch) => {
+    let searchBestSellers = async (newSearch: ISearch) => {
         try {
             setLoading(true);
 
-            let res = await axios.get('/api/Books/BestSellers', { params: request });
+            let res = await axios.get('/api/Books/BestSellers', { params: newSearch });
 
             let { item } = res.data;
 
@@ -103,28 +76,17 @@ let BestSellersProvider: React.FC<{ children: React.ReactNode }> = ({ children }
         }
     }
 
-    let changePage = (page: number) => {
-        let request = {
-            ...search,
-            pageNr: page
-        }
-
-        window.scrollTo(0, 0);
-        navigate(location.pathname, { state: { search: request } });
-    }
-    
 
     return (
         <Provider
             value={{
                 isLoading,
                 search,
-                categories, 
+                categories,
                 bestSellers,
 
                 updateSearch,
-                doSearch,
-                changePage,
+                searchBestSellers
             }}
         >
             {children}

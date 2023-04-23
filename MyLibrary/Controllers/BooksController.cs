@@ -17,7 +17,7 @@ namespace MyLibrary.WebApp.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> BestSellers(string publishDate, string? category)
+        public async Task<IActionResult> BestSellers(DateTime publishDate, string? category)
         {
             var response = string.IsNullOrWhiteSpace(category)
                 ? await _bookService.GetBestSellersOverview(publishDate)
@@ -27,9 +27,9 @@ namespace MyLibrary.WebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyLibrary(string? category)
+        public async Task<IActionResult> MyLibrary(string? category, string? title, string? author)
         {
-            var response = await _bookService.GetMyLibrary(category);
+            var response = await _bookService.GetMyLibrary(category, title, author);
             return Ok(response);
         }
 

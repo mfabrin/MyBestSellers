@@ -23,6 +23,22 @@ let Filters = () => {
                 />
             </Grid>
             <Grid item>
+                <TextField
+                    variant="standard"
+                    label="Title"
+                    value={search.title}
+                    onChange={(e) => updateSearch({ ...search, title: e.target.value })}
+                />
+            </Grid>
+            <Grid item>
+                <TextField
+                    variant="standard"
+                    label="Author"
+                    value={search.author}
+                    onChange={(e) => updateSearch({ ...search, author: e.target.value })}
+                />
+            </Grid>
+            <Grid item>
                 <Button type="submit" variant="contained" color="primary" onClick={() => doSearch(search)}>
                     <Search />
                 </Button>
