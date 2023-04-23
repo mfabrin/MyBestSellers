@@ -21,7 +21,7 @@ let Results = () => {
                     }
                     {books.map(book =>
                         <Grid key={book.isbn} item xs={12} sm={4} md={6} lg={2}>
-                            <Card>
+                            <Card sx={{ height: 400 }}>
                                 <Link to={`/book/${book.isbn}/${book.category}/${book.publishDate}/`}>
                                     <CardActionArea>
                                         <CardMedia
@@ -33,7 +33,7 @@ let Results = () => {
                                         />
                                     </CardActionArea>
                                 </Link>
-                                <CardContent sx={{ height: 80 }}>
+                                <CardContent>
                                     <Typography>{book.title}</Typography>
                                     <Typography color="text.secondary">by {book.author}</Typography>
                                 </CardContent>

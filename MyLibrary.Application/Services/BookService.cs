@@ -98,6 +98,7 @@ namespace MyLibrary.Application.Services
                     PublishDate = x.PublishDate,
                     Title = x.Title,
                     Author = x.Author,
+                    Image = x.Image
                 }).ToList();
 
 

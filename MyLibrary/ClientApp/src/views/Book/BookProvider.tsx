@@ -51,6 +51,9 @@ let BookProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
                 setBook({
                     ...item,
+                    isFavourite: item.isFavourite ?? false,
+                    isRead: item.isRead ?? false,
+                    rank: item.rank ?? 0,
                     notes: item.notes ?? ''
                 });
 
