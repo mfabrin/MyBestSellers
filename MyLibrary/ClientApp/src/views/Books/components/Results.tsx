@@ -17,6 +17,11 @@ let Results = () => {
             {isLoading && <CircleLoader />}
             {isLoading === false &&
                 <Grid container sx={{ paddingTop: theme.spacing(1) }}>
+                    {books.length === 0 &&
+                        <Grid item xs={12} sm={4} md={6} lg={2}>
+                            <Typography variant="subtitle2">Sorry no books were found</Typography>
+                        </Grid>
+                    }
                     {books.map(book =>
                         <Grid key={book.isbn} item xs={12} sm={4} md={6} lg={2}>
                             <Card>

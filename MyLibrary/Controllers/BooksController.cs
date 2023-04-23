@@ -17,9 +17,9 @@ namespace MyLibrary.WebApp.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> BookList(int pageNr, string category)
+        public async Task<IActionResult> BookList(string? isbn, int pageNr, string category)
         {
-            var response = await _bookService.GetBooks(pageNr, category);
+            var response = await _bookService.GetBooks(isbn, pageNr, category);
             return Ok(response);
         }
 

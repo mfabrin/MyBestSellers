@@ -18,11 +18,17 @@ namespace MyLibrary.Application.Services
         }
 
 
-        public async Task<ItemListResponse<BooksResponse>> GetBooks(int pageNr, string category)
+        public async Task<ItemListResponse<BooksResponse>> GetBooks(string? isbn, int pageNr, string category)
         {
             var timesResponse = await _timesManager.GetCategoryBooks(pageNr, category);
 
-            var isbns = timesResponse.results.books.Select(x => x.primary_isbn13).ToList();
+            if (string.IsNullOrWhiteSpace(isbn) == false)
+                timesResponse.results.books = timesResponse.results.books.Where(x => x.primary_isbn13 == isbn).ToArray();
+
+
+            var isbns = timesResponse.results.books
+                .Select(x => x.primary_isbn13)
+                .ToList();
 
             var myBooks = await _repBooks.Get(x => isbns.Contains(x.ISBN13));
 
@@ -63,7 +69,7 @@ namespace MyLibrary.Application.Services
                 Author = timesBook.author,
                 Contributor = timesBook.contributor,
                 Image = timesBook.book_image,
-                Description = timesBook.description, 
+                Description = timesBook.description,
                 IsFavourite = myBook?.IsFavourite ?? false,
                 IsRead = myBook?.IsRead ?? false,
                 Notes = myBook?.Notes,
