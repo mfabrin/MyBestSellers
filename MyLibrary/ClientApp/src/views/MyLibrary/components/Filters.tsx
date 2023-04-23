@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Grid, TextField, MenuItem, Button, Autocomplete } from '@mui/material';
+import { Grid, TextField, Button, Autocomplete } from '@mui/material';
 import { Search } from '@mui/icons-material'
 import { FilterContainer } from "components";
 import { myLibraryContext } from '../MyLibraryProvider';
@@ -20,17 +20,6 @@ let Filters = () => {
                     options={bookCategories.map(x => x.key)}
                     getOptionLabel={(option) => bookCategories.find(x => x.key === option)?.value || ''}
                     renderInput={(params) => <TextField {...params} variant="standard" label="Category" />}
-                />
-            </Grid>
-            <Grid item>
-                <TextField
-                    variant="standard"
-                    label="Title"
-                    value={search.title}
-                    onChange={(e) => updateSearch({
-                        ...search,
-                        title: e.target.value
-                    })}
                 />
             </Grid>
             <Grid item>

@@ -16,9 +16,9 @@ namespace MyLibrary.Application.DTO.Book
         public string Author { get; set; }
         public string Contributor { get; set; }
         public string Description { get; set; }
-        public string Notes { get; set; }
-        public int Rank { get; set; }
-        public bool IsFavourite { get; set; }
-        public bool IsRead { get; set; }
+        public string? Notes { get; set; }
+        public int? Rank { get; set; }
+        public bool? IsFavourite { get; set; }
+        public bool? IsRead { get; set; }
     }
 }

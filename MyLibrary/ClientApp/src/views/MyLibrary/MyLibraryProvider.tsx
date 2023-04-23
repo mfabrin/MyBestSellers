@@ -11,12 +11,10 @@ interface IContext {
     updateSearch: (newSearch: ISearch) => void
     doSearch: (values: ISearch) => void
     changePage: (pageNr: number) => void
-    updateFavourite: (isbn: string) => Promise<void>
 }
 
 interface ISearch {
     category: string
-    title: string
 }
 
 interface IBook {
@@ -24,11 +22,8 @@ interface IBook {
     title: string
     author: string
     publishDate: string
-    contributor: string
     image: string
     category: string
-    description: string
-    isFavourite: boolean
 }
 
 export let myLibraryContext = React.createContext({} as IContext);
@@ -45,8 +40,7 @@ let MyLibraryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
     let [totalItems, setTotalItems] = useState(0);
 
     let [search, setSearch] = useState<ISearch>({
-        category: '',
-        title: ''
+        category: ''
     })
 
 
@@ -116,22 +110,6 @@ let MyLibraryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
         navigate(location.pathname, { state: { search: request } });
     }
 
-    let updateFavourite = async (isbn: string) => {
-        try {
-            await axios.put(`/api/Books/UpdateFavourite?isbn=${isbn}`);
-
-            let book = books.find(x => x.isbn === isbn) as IBook;
-            let bookIdx = books.findIndex(x => x.isbn === isbn);
-
-            let newBook = { ...book, isFavourite: !book?.isFavourite };
-
-            books.splice(bookIdx, 1, newBook);
-
-            setBooks([...books]);
-
-        } catch (err) { }
-    }
-
 
     return (
         <Provider
@@ -143,8 +121,7 @@ let MyLibraryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
                 updateSearch,
                 doSearch,
-                changePage,
-                updateFavourite
+                changePage
             }}
         >
             {children}

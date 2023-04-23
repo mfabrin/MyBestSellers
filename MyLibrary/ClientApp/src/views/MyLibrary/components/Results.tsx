@@ -1,16 +1,13 @@
 import { useContext } from 'react';
-import { Grid, Typography, Card, CardMedia, CardContent, CardActions, CardActionArea, Checkbox } from '@mui/material';
-import { Favorite, FavoriteBorder } from '@mui/icons-material';
+import { Grid, Typography, Card, CardMedia, CardContent, CardActionArea } from '@mui/material';
 import { CircleLoader } from 'components'
 import { myLibraryContext } from '../MyLibraryProvider';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import theme from 'assets/theme';
 
 
 let Results = () => {
-    let navigate = useNavigate();
-
-    let { isLoading, search, books, updateFavourite } = useContext(myLibraryContext);
+    let { isLoading, books } = useContext(myLibraryContext);
 
     return (
         <>
@@ -40,14 +37,6 @@ let Results = () => {
                                     <Typography>{book.title}</Typography>
                                     <Typography color="text.secondary">by {book.author}</Typography>
                                 </CardContent>
-                                <CardActions disableSpacing>
-                                    <Checkbox
-                                        icon={<FavoriteBorder />}
-                                        checkedIcon={<Favorite />}
-                                        checked={book.isFavourite}
-                                        onChange={async (e) => await updateFavourite(book.isbn)}
-                                    />
-                                </CardActions>
                             </Card>
                         </Grid>
                     )}

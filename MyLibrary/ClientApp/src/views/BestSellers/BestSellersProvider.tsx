@@ -5,14 +5,13 @@ import dayjs from 'dayjs';
 
 interface IContext {
     isLoading: boolean
-    books: IBook[]
     search: ISearch
     categories: string[]
+    bestSellers: ICategory[]
 
     updateSearch: (newSearch: ISearch) => void
     doSearch: (values: ISearch) => void
     changePage: (pageNr: number) => void
-    updateLibrary: (book: IBook) => Promise<void>
 }
 
 interface ISearch {
@@ -20,16 +19,19 @@ interface ISearch {
     category: string
 }
 
+interface ICategory {
+    category: string
+    publishDate: string
+    books: IBook[]
+}
+
 interface IBook {
     isbn: string
     title: string
     publishDate: string
     author: string
-    contributor: string
     image: string
     category: string
-    description: string
-    isFavourite: boolean
 }
 
 export let bestSellersContext = React.createContext({} as IContext);
@@ -42,9 +44,9 @@ let BestSellersProvider: React.FC<{ children: React.ReactNode }> = ({ children }
 
     let [isLoading, setLoading] = useState(true);
 
-    let [books, setBooks] = useState<IBook[]>([]);
-
     let [categories, setCategories] = useState<string[]>([]);
+    let [bestSellers, setBestSellers] = useState<ICategory[]>([]);
+
     let [search, setSearch] = useState<ISearch>({
         publishDate: '2023-04-01',
         category: ''
@@ -93,7 +95,7 @@ let BestSellersProvider: React.FC<{ children: React.ReactNode }> = ({ children }
             let { item } = res.data;
 
             setCategories(item.categories)
-            setBooks(item.books);
+            setBestSellers(item.bestSellers)
 
         } catch (error) { }
         finally {
@@ -110,42 +112,19 @@ let BestSellersProvider: React.FC<{ children: React.ReactNode }> = ({ children }
         window.scrollTo(0, 0);
         navigate(location.pathname, { state: { search: request } });
     }
-
-    let updateLibrary = async (req: IBook) => {
-        try {
-            let request = {
-                isbn: req.isbn,
-                category: req.category,
-                publishDate: req.publishDate
-            };
-
-            await axios.post('/api/Books/UpdateLibrary', request);
-
-            let book = books.find(x => x.isbn === req.isbn && x.category === req.category) as IBook;
-            let bookIdx = books.findIndex(x => x.isbn === req.isbn && x.category === req.category);
-
-            let newBook = { ...book, isFavourite: !book?.isFavourite };
-
-            books.splice(bookIdx, 1, newBook);
-
-            setBooks([...books]);
-
-        } catch (err) { }
-    }
-
+    
 
     return (
         <Provider
             value={{
                 isLoading,
                 search,
-                books,
-                categories,
+                categories, 
+                bestSellers,
 
                 updateSearch,
                 doSearch,
                 changePage,
-                updateLibrary
             }}
         >
             {children}

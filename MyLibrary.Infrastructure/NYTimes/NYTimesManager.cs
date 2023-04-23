@@ -17,8 +17,6 @@ namespace MyLibrary.Infrastructure.NYTimes
 
 
 
-
-        
         public async Task<BestSellersOverviewResponse> GetBestSellersOverview(string publishDate)
         {
             var client = GetClient();
@@ -36,7 +34,7 @@ namespace MyLibrary.Infrastructure.NYTimes
             return response.Data;
         }
 
-        public async Task<BestSellersResponse> GetBestSellers(string publishDate, string category)
+        public async Task<BestSellersCategoryResponse> GetBestSellers(string publishDate, string category)
         {
             var client = GetClient();
 
@@ -44,7 +42,7 @@ namespace MyLibrary.Infrastructure.NYTimes
 
             restRequest.AddParameter("api-key", _settings.Value.APIKey);
 
-            var response = await client.ExecuteAsync<BestSellersResponse>(restRequest);
+            var response = await client.ExecuteAsync<BestSellersCategoryResponse>(restRequest);
 
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception("Error calling API for best sellers", response.ErrorException);

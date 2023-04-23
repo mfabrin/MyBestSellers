@@ -14,8 +14,5 @@ namespace MyLibrary.Application.DTO.Book
         public string Image { get; set; }
         public string Title { get; set; }
         public string Author { get; set; }
-        public string Contributor { get; set; }
-        public string Description { get; set; }
-        public bool IsFavourite { get; set; }
     }
 }

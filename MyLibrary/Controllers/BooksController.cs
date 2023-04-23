@@ -21,15 +21,15 @@ namespace MyLibrary.WebApp.Controllers
         {
             var response = string.IsNullOrWhiteSpace(category)
                 ? await _bookService.GetBestSellersOverview(publishDate)
-                : await _bookService.GetBestSellers(publishDate, category);
+                : await _bookService.GetBestSellersByCategory(publishDate, category);
 
             return Ok(response);
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyLibrary(string? category, string? title)
+        public async Task<IActionResult> MyLibrary(string? category)
         {
-            var response = await _bookService.GetMyLibrary(category, title);
+            var response = await _bookService.GetMyLibrary(category);
             return Ok(response);
         }
 
@@ -41,23 +41,9 @@ namespace MyLibrary.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateLibrary(MyLibraryUpdateRequest request)
-        {
-            var response = await _bookService.UpdateLibrary(request);
-            return Ok(response);
-        }
-
-        [HttpPost]
         public async Task<IActionResult> Update(BookSaveRequest request)
         {
             var response = await _bookService.UpdateBook(request);
-            return Ok(response);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var response = await _bookService.DeleteBook(id);
             return Ok(response);
         }
     }
