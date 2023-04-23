@@ -13,21 +13,26 @@ namespace MyLibrary.Domain.AggregateRoots
         public bool IsRead { get; private set; }
         public bool IsFavourite { get; private set; }
         public string Notes { get; private set; }
+        public DateTime CreatedOn { get; private set; }
+        public DateTime LastUpdatedOn { get; private set; }
 
 
         public Book(string isbn13)
         {
             ISBN13 = isbn13;
+            CreatedOn = DateTime.Now;
         }
 
         public void SetAsFavourite()
         {
             IsFavourite = true;
+            LastUpdatedOn = DateTime.Now;
         }
 
         public void SetAsNoFavourite()
         {
             IsFavourite = false;
+            LastUpdatedOn = DateTime.Now;
         }
 
         public void Update(int? rank, bool isRead, bool isFavourite, string notes)
@@ -36,6 +41,7 @@ namespace MyLibrary.Domain.AggregateRoots
             IsRead = isRead;
             IsFavourite = isFavourite;
             Notes = notes;
+            LastUpdatedOn = DateTime.Now;
         }
     }
 }
