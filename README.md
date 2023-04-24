@@ -1,8 +1,26 @@
 
-# My Library
+# MyBestSellers - Digital library
 
-MyLibrary is an application that retrieves informations about NewYork Times published Best Sellers on a certain date from public endpoints
-## Documentation
+The Books API provides information about book reviews and The New York Times Best Sellers lists. MyBestSellers is a WebApplication that can show you each list, based on a date that you can specify. If you like a book you can save it, rank it, and add some notes.
+### MyBestSellers.Application
+Contains services needed to retrieves data from database and expose them to WebApp and a class that register all services for dependency injection
 
-[Documentation](https://docs.google.com/document/d/1-j1Sh-9vxv_PuIGIjaBcB8dIqo1N64nMVjHpAaZqKD8/edit?usp=sharing)
+### MyBestSellers.Common
+Contains utility classes to register appsettings.json settings via dependency injection 
 
+## MyBestSellers.Domain
+Project domain, where database collections are defined
+
+## MyBestSellers.Infrastructure
+Contains the service that make REST calls to NY Times and the utility classes to make queries on database
+
+## MyBestSellers.WebApp
+The startup project: contains, in the ClientApp folder, the React application. 
+"src" folder has some sub-folders:
+- assets → contains styles of the app
+- components → contains generic components
+- helpers → contains global context and utilities
+- views → contains main components (the pages of the app)
+
+
+[Documentation](https://docs.google.com/document/d/1qIguqPaVFa8e87m96mzDuF_hMD1U1YjrNFKfECpfdMU/edit?usp=sharing)
