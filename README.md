@@ -8,13 +8,13 @@ Contains services needed to retrieves data from database and expose them to WebA
 ### MyBestSellers.Common
 Contains utility classes to register appsettings.json settings via dependency injection 
 
-## MyBestSellers.Domain
+### MyBestSellers.Domain
 Project domain, where database collections are defined
 
-## MyBestSellers.Infrastructure
+### MyBestSellers.Infrastructure
 Contains the service that make REST calls to NY Times and the utility classes to make queries on database
 
-## MyBestSellers.WebApp
+### MyBestSellers.WebApp
 The startup project: contains, in the ClientApp folder, the React application. 
 "src" folder has some sub-folders:
 - assets → contains styles of the app
@@ -23,4 +23,6 @@ The startup project: contains, in the ClientApp folder, the React application.
 - views → contains main components (the pages of the app)
 
 
-[Documentation](https://docs.google.com/document/d/1qIguqPaVFa8e87m96mzDuF_hMD1U1YjrNFKfECpfdMU/edit?usp=sharing)
+## Documentation
+
+Here is full [documentation](https://docs.google.com/document/d/1qIguqPaVFa8e87m96mzDuF_hMD1U1YjrNFKfECpfdMU/edit?usp=sharing)
