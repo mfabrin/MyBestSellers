@@ -27,9 +27,9 @@ namespace MyLibrary.WebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyLibrary(string? category, string? title, string? author)
+        public async Task<IActionResult> MyBestSellers(string? category, string? title, string? author)
         {
-            var response = await _bookService.GetMyLibrary(category, title, author);
+            var response = await _bookService.GetMyBestSellers(category, title, author);
             return Ok(response);
         }
 

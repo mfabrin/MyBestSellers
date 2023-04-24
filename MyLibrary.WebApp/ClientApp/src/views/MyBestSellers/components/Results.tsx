@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import { Grid, Typography, Card, CardMedia, CardContent, CardActionArea } from '@mui/material';
 import { CircleLoader } from 'components'
-import { myLibraryContext } from '../MyLibraryProvider';
+import { myBestSellersContext } from '../MyBestSellersProvider';
 import { Link } from 'react-router-dom';
 import theme from 'assets/theme';
 
 
 let Results = () => {
-    let { isLoading, books } = useContext(myLibraryContext);
+    let { isLoading, books } = useContext(myBestSellersContext);
 
     return (
         <>

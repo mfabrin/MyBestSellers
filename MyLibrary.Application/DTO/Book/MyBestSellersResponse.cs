@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyLibrary.Application.DTO.Book
 {
-    public class MyLibraryResponse
+    public class MyBestSellersResponse
     {
         public string ISBN { get; set; }
         public string Category { get; set; }

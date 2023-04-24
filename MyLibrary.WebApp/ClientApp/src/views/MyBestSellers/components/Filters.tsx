@@ -2,12 +2,12 @@ import { useContext } from 'react';
 import { Grid, TextField, Button, Autocomplete } from '@mui/material';
 import { Search } from '@mui/icons-material'
 import { FilterContainer } from "components";
-import { myLibraryContext } from '../MyLibraryProvider';
+import { myBestSellersContext } from '../MyBestSellersProvider';
 import { applicationContext } from 'helpers/services';
 
 let Filters = () => {
     let { bookCategories } = useContext(applicationContext);
-    let { search, updateSearch, doSearch } = useContext(myLibraryContext);
+    let { search, updateSearch, doSearch } = useContext(myBestSellersContext);
 
     return (
         <FilterContainer>

@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import { Filters, Results } from './components';
 import theme from 'assets/theme';
 
-let MyLibrary = () => {
+let MyBestSellers = () => {
     return (
         <Grid container sx={{ padding: theme.spacing(2) }}>
             <Grid item xs={12}>
@@ -15,4 +15,4 @@ let MyLibrary = () => {
     )
 }
 
-export default MyLibrary;
+export default MyBestSellers;

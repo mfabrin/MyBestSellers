@@ -26,11 +26,11 @@ interface IBook {
     category: string
 }
 
-export let myLibraryContext = React.createContext({} as IContext);
+export let myBestSellersContext = React.createContext({} as IContext);
 
-let { Provider } = myLibraryContext;
+let { Provider } = myBestSellersContext;
 
-let MyLibraryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+let MyBestSellersProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     let location = useLocation();
     let navigate = useNavigate();
 
@@ -82,7 +82,7 @@ let MyLibraryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
         try {
             setLoading(true);
 
-            let res = await axios.get('/api/Books/MyLibrary', { params: request });
+            let res = await axios.get('/api/Books/MyBestSellers', { params: request });
 
             let { items } = res.data;
 
@@ -111,4 +111,4 @@ let MyLibraryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
     )
 }
 
-export default MyLibraryProvider;
+export default MyBestSellersProvider;

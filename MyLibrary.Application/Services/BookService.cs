@@ -79,7 +79,7 @@ namespace MyLibrary.Application.Services
             return new ItemResponse<BestSellersResponse>(response);
         }
 
-        public async Task<ItemListResponse<MyLibraryResponse>> GetMyLibrary(string? category, string? title, string? author)
+        public async Task<ItemListResponse<MyBestSellersResponse>> GetMyBestSellers(string? category, string? title, string? author)
         {
             var predicate = PredicateBuilder.True<Book>();
 
@@ -105,7 +105,7 @@ namespace MyLibrary.Application.Services
 
 
             var response = myBooks
-                .Select(x => new MyLibraryResponse
+                .Select(x => new MyBestSellersResponse
                 {
                     ISBN = x.ISBN13,
                     Category = x.Category,
@@ -116,7 +116,7 @@ namespace MyLibrary.Application.Services
                 }).ToList();
 
 
-            return new ItemListResponse<MyLibraryResponse>(response);
+            return new ItemListResponse<MyBestSellersResponse>(response);
         }
 
         public async Task<ItemResponse<BookResponse>> GetBook(string isbn, string category, string publishDate)

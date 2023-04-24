@@ -3,7 +3,7 @@ import { Layout } from 'components';
 
 import {
     BestSellers,
-    MyLibrary,
+    MyBestSellers,
     Book
 } from 'views';
 
@@ -12,8 +12,7 @@ let Routes = () => {
         <Router>
             <Route path="/bestsellers" element={<Layout children={<BestSellers />} />} />
             <Route path="/book/:isbn/:category/:publishDate" element={<Layout children={<Book />} />} />
-            
-            <Route path="/mylibrary" element={<Layout children={<MyLibrary />} />} />
+            <Route path="/mybestsellers" element={<Layout children={<MyBestSellers />} />} />
 
             <Route path="*" element={<Navigate to={"/bestsellers"} />} />
         </Router>

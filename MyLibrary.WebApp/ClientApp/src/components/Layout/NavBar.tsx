@@ -12,7 +12,7 @@ let NavBar = () => {
 
     const pages: IPage[] = [
         { url: '/bestsellers', title: 'Best Sellers' },
-        { url: '/mylibrary', title: 'My Library' }
+        { url: '/mybestsellers', title: 'My Best Sellers' }
     ]
 
     return (
