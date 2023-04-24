@@ -1,10 +1,7 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { enqueueSnackbar } from 'notistack';
 
 let AxiosInterceptors = () => {
-    let navigate = useNavigate();
-
     axios.interceptors.request.use(async config => {
         return config;
     })
@@ -25,12 +22,6 @@ let AxiosInterceptors = () => {
                             enqueueSnackbar(data.errors[i], { variant: 'error' });
                         }
                     }
-                    break;
-
-                case 403:
-                case 401:
-                    enqueueSnackbar('User not enabled to do this operation', { variant: 'error' });
-                    navigate('/error401', { replace: true });
                     break;
 
                 case 500:

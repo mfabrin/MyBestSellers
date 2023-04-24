@@ -6,11 +6,9 @@ interface IContext {
     isLoading: boolean
     books: IBook[]
     search: ISearch
-    totalItems: number
 
     updateSearch: (newSearch: ISearch) => void
     doSearch: (values: ISearch) => void
-    changePage: (pageNr: number) => void
 }
 
 interface ISearch {
@@ -39,7 +37,6 @@ let MyLibraryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
     let [isLoading, setLoading] = useState(true);
 
     let [books, setBooks] = useState<IBook[]>([]);
-    let [totalItems, setTotalItems] = useState(0);
 
     let [search, setSearch] = useState<ISearch>({
         category: '',
@@ -74,13 +71,7 @@ let MyLibraryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
     }
 
     let doSearch = (values: ISearch) => {
-        let request = {
-            ...values,
-            // pageNr: values.pageNr > 0 ? 0 : values.pageNr
-        }
-
-        navigate(location.pathname, { state: { search: request } });
-
+        navigate(location.pathname, { state: { search: values } });
     }
 
     let updateSearch = (newSearch: ISearch) => {
@@ -93,25 +84,14 @@ let MyLibraryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
             let res = await axios.get('/api/Books/MyLibrary', { params: request });
 
-            let { items, recordCount } = res.data;
+            let { items } = res.data;
 
             setBooks(items);
-            setTotalItems(recordCount);
 
         } catch (error) { }
         finally {
             setLoading(false);
         }
-    }
-
-    let changePage = (page: number) => {
-        let request = {
-            ...search,
-            pageNr: page
-        }
-
-        window.scrollTo(0, 0);
-        navigate(location.pathname, { state: { search: request } });
     }
 
 
@@ -121,11 +101,9 @@ let MyLibraryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
                 isLoading,
                 search,
                 books,
-                totalItems,
 
                 updateSearch,
-                doSearch,
-                changePage
+                doSearch
             }}
         >
             {children}

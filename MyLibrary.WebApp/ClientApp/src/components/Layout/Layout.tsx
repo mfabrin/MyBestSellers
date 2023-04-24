@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { CircleLoader } from 'components';
-import { applicationContext } from 'helpers/services';
-import NavBar from './NavBar';
 import { Container } from '@mui/material';
 import theme from 'assets/theme';
+import { applicationContext } from 'helpers/services';
+import { CircleLoader } from 'components';
+import NavBar from './NavBar';
 
 interface IProps {
     children: React.ReactNode
